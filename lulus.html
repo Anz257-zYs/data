@@ -1,0 +1,173 @@
+
+     
+
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>document</title>
+    <style>
+        body {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: rgb(228, 228, 228);
+            font-family: Arial, Helvetica, sans-serif;
+
+        }
+
+        div {
+            flex-direction: column;
+            display: flex  ;
+        }
+
+        .edit-button {
+            background-color: blue;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+            .edit-button:hover {
+                background-color: darkblue;
+                transition: 0.5s;
+            }
+
+        .hapus-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+            .hapus-button:hover {
+                background-color: darkred;
+                transition: 0.5s;
+            }
+
+        .kotak-input {
+            padding: 10px;
+            margin: 5px 0;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .kotak-output {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: rgb(175, 175, 175);
+        }
+    </style>
+</head>
+<body >
+    <div>
+    <div class="kotak-input">
+    
+    <input type="text" id="nama" placeholder="Nama Siswa">
+    <input type="text" id="kelas" placeholder="Kelas">
+    <input type="number" id="nilai" placeholder="Nilai">
+    <button onclick="tambahSiswa()">Tambah ke Daftar</button>
+    <button onclick="hapusdata()" class="hapus-button">Hapus Data</button>
+    <button onclick="editdata()" class="edit-button">Edit Data</button>
+</div>
+
+<center>
+    <div id="seswa" class="kotak-output"></div>
+</center>
+</div>
+<script>
+    let array = []
+    function tambahSiswa() {
+    
+        let nama = document.getElementById("nama").value
+        let kelas = document.getElementById("kelas").value
+        let nilai = Number(document.getElementById("nilai").value)
+
+        let siswa = {
+            nama : nama,
+            kelas : kelas,
+            nilai : nilai,
+
+            get info (){
+                return `Nama: ${this.nama} ー ${this.kelas}`
+            },
+            get status (){
+                return `kelulusan: ${this.nilai >= 75 ? "lulus" : "tidak lulus"}`
+            },
+            // function grade kelulusan untuk nentuin nilai ABCDF //
+            grade(){
+                if (this.nilai >= 85) return "A"
+                else if (this.nilai >= 75) return "B"
+                else if (this.nilai >= 65) return "C"
+                else if (this.nilai >= 50) return "D"
+                else return "F"
+            }
+        }
+        array.push(siswa)
+
+    // foreach panggil function dan pakain alert //
+    array.forEach(siswa => {
+        alert(
+            `
+        ${siswa.info}
+        Nilai: ${siswa.nilai}
+        Grade: ${siswa.grade()}
+        ${siswa.status}`)
+    }) 
+
+    let output = ""
+
+    array.forEach(siswa => {
+        output += `
+        ${siswa.info}<br>
+        Nilai: ${siswa.nilai}<br>
+        Grade: ${siswa.grade()}<br>
+        ${siswa.status}<br><br>
+        `
+    })
+
+    document.getElementById("seswa").innerHTML = output
+    }
+    function hapusdata() {
+        array = []
+        document.getElementById("seswa").innerHTML = ""
+    }
+        
+    function editdata() {
+        let namaTarget = prompt("Masukkan nama siswa yang ingin diedit:");
+    
+    let siswa = array.find(s => s.nama === namaTarget);
+
+    if (!siswa) {
+        alert("Siswa tidak ditemukan!");
+        return;
+    }
+
+    siswa.kelas = prompt("Masukkan kelas baru:", siswa.kelas);
+    siswa.nilai = Number(prompt("Masukkan nilai baru:", siswa.nilai));
+
+    tampilkanData();
+    }
+
+    function tampilkanData() {
+    let output = "";
+    array.forEach(s => {
+        output += `
+            ${s.info}<br>
+            Nilai: ${s.nilai}<br>
+            Grade: ${s.grade()}<br>
+            ${s.status}<br><hr>
+        `;
+    });
+    document.getElementById("seswa").innerHTML = output;
+}
+</script>
+</body>
+</html>
